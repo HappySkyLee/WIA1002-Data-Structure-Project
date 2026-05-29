@@ -5,12 +5,12 @@ public class SmartLibrary implements LibraryADT {
     private BookBST catalogue;
     Scanner scanner = new Scanner(System.in);
 
-    public void runMenu(boolean running){
-        logInMenu(running);
+    public void runMenu(){
+        logInMenu();
     } //?
 
 
-    public void logInMenu(boolean running){
+    public void logInMenu(){
         System.out.println("> Welcome to the Smart Library!");
         System.out.println("> Are you a Librarian or a Student? Please select: ");
         System.out.println("1. Librarian");
@@ -28,8 +28,7 @@ public class SmartLibrary implements LibraryADT {
                 break;
             case 3:
                 System.out.println("> Exiting...");
-                running = false;
-                break;
+                System.exit(0);
             default:
                 System.out.println("> Invalid selection. Please try again.");
         }

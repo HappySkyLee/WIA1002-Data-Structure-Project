@@ -14,6 +14,6 @@ public class BorrowHistory {
     }
 
     public void displayRecord() {
-        System.out.println(isbn + " | " + title + " | " + author);
+        System.out.println("ISBN: [" + isbn + "] Title: " + title + " by " + author);
     }
 }

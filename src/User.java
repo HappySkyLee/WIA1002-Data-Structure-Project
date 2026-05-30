@@ -53,4 +53,8 @@ public class User {
         System.out.println("Role: " + userRole);
         System.out.printf("Fine: RM %.2f%n", fine);
     }
+
+    public boolean removeLatestBorrowHistoryIfMatches(int isbn) {
+        return borrowHistory.removeTopIfMatches(isbn);
+    }
 }

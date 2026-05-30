@@ -1,13 +1,13 @@
 public class UndoAction {
     private String actionType;
     private Book bookSnapshot;
-    private String studentId;
+    private String userID;
     private double amount;
     
-    public UndoAction(String actionType, Book bookSnapshot, String studentId, double amount) {
+    public UndoAction(String actionType, Book bookSnapshot, String userID, double amount) {
         this.actionType = actionType;
         this.bookSnapshot = bookSnapshot;
-        this.studentId = studentId;
+        this.userID = userID;
         this.amount = amount;
     }
 
@@ -19,8 +19,8 @@ public class UndoAction {
         return bookSnapshot;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getUserID() {
+        return userID;
     }
 
     public double getAmount() {

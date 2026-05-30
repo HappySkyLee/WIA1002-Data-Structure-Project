@@ -33,9 +33,9 @@ public class Book {
         return borrowBy;
     }
 
-    public void borrowBook(String StudentID){
+    public void borrowBook(String userID){
             this.borrowed = true;
-            this.borrowBy = StudentID;
+            this.borrowBy = userID;
     }
 
     public void returnBook() {

@@ -1,17 +1,17 @@
 import java.util.ArrayList;
 
 public class UndoStack {
-    private ArrayList<String> undoStack;
+    private ArrayList<UndoAction> undoStack;
 
     public UndoStack() {
         undoStack = new ArrayList<>();
     }
 
-    public void push(String action) {
+    public void push(UndoAction action) {
         undoStack.add(action);
     }
 
-    public String pop() {
+    public UndoAction pop() {
         if (isEmpty()) {
             System.out.println("> No actions available to undo.");
             return null;

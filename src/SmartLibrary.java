@@ -227,6 +227,19 @@ public class SmartLibrary implements LibraryADT {
     }
 
     @Override
+    public void viewRegisteredUsers() {
+        if (users.isEmpty()) {
+            System.out.println("> No registered users found.");
+            return;
+        }
+        
+        System.out.println("> Registered Users:");
+        for (User user : users.values()) {
+            System.out.println("User ID: " + user.getUserID() + " | Role: " + user.getUserRole());
+        }
+    }
+
+    @Override
     public void checkFineStatus(String userID) {
         User user = users.get(userID);
 

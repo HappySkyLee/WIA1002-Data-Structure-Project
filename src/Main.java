@@ -66,17 +66,18 @@ public class Main {
             System.out.println("1. Add Book");
             System.out.println("2. Remove Book");
             System.out.println("3. View All Borrowed Books");
-            System.out.println("4. Fine Management");
-            System.out.println("5. Undo Last Action");
+            System.out.println("4. View All Registered Users");
+            System.out.println("5. Fine Management");
+            System.out.println("6. Undo Last Action");
             System.out.println();
             System.out.println(">> General Options:");
-            System.out.println("6. View All Books");
-            System.out.println("7. Search Books");
-            System.out.println("8. Borrow Book");
-            System.out.println("9. Return Book");
-            System.out.println("10. View My Borrowing History");
-            System.out.println("11. Check Fine Status");
-            System.out.println("12. Back");
+            System.out.println("7. View All Books");
+            System.out.println("8. Search Books");
+            System.out.println("9. Borrow Book");
+            System.out.println("10. Return Book");
+            System.out.println("11. View My Borrowing History");
+            System.out.println("12. Check Fine Status");
+            System.out.println("13. Back");
             System.out.print("> Please select an option: ");
 
             int librarianChoice = readPositiveInt();
@@ -104,30 +105,33 @@ public class Main {
                     library.viewAllBorrowedBooks();
                     break;
                 case 4:
-                    fineManagementMenu();
+                    library.viewRegisteredUsers();
                     break;
                 case 5:
-                    library.undoLastAction();
+                    fineManagementMenu();
                     break;
                 case 6:
-                    library.viewAllBooks();
+                    library.undoLastAction();
                     break;
                 case 7:
-                    searchBooksMenu();
+                    library.viewAllBooks();
                     break;
                 case 8:
-                    borrowBookMenu(userID);
+                    searchBooksMenu();
                     break;
                 case 9:
-                    returnBookMenu(userID);
+                    borrowBookMenu(userID);
                     break;
                 case 10:
-                    library.viewOwnBorrowedBooks(userID);
+                    returnBookMenu(userID);
                     break;
                 case 11:
-                    library.checkFineStatus(userID);
+                    library.viewOwnBorrowedBooks(userID);
                     break;
                 case 12:
+                    library.checkFineStatus(userID);
+                    break;
+                case 13:
                     System.out.println("> Exiting...");
                     runningLibrarian = false;
                     break;
@@ -201,6 +205,7 @@ public class Main {
 
             switch(fineChoice){
                 case 1:
+                    library.viewRegisteredUsers();
                     System.out.print("> Enter User ID to check fine status: ");
                     String userID = readNonEmptyString();
                     library.checkFineStatus(userID);

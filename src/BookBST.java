@@ -172,6 +172,7 @@ public class BookBST {
         if(author == null || author.trim().isEmpty()) {
             return booksByAuthor;
         }
+
         String lowerCaseAuthor = author.trim().toLowerCase();
 
         searchByAuthorRec(root, lowerCaseAuthor, booksByAuthor);
@@ -182,8 +183,8 @@ public class BookBST {
         if (current != null) {
             searchByAuthorRec(current.left, author, booksByAuthor);
 
-            String currentAuthor = current.book.getAuthor();
-            
+            String currentAuthor = current.book.getAuthor().toLowerCase();
+
             if (currentAuthor.contains(author)) {
                 booksByAuthor.add(current.book);
             }
@@ -194,7 +195,14 @@ public class BookBST {
     
     public ArrayList<Book> searchByTitle(String title) {
         ArrayList<Book> booksByTitle = new ArrayList<>();
-        searchByTitleRec(root, title, booksByTitle);
+
+        if(title == null || title.trim().isEmpty()) {
+            return booksByTitle;
+        }
+
+        String lowerCaseTitle = title.trim().toLowerCase();
+
+        searchByTitleRec(root, lowerCaseTitle, booksByTitle);
         return booksByTitle;
     }
 
@@ -202,7 +210,9 @@ public class BookBST {
         if (current != null) {
             searchByTitleRec(current.left, title, booksByTitle);
 
-            if (current.book.getTitle().equalsIgnoreCase(title)) {
+            String currentTitle = current.book.getTitle().toLowerCase();
+            
+            if (currentTitle.contains(title)) {
                 booksByTitle.add(current.book);
             }
 

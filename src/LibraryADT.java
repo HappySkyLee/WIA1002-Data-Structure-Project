@@ -10,6 +10,7 @@ public interface LibraryADT {
     void viewAllBooks();
     void viewAllBorrowedBooks();
     void viewOwnBorrowedBooks(String userID);
+    void viewRegisteredUsers();
     void checkFineStatus(String userID);
     void addFine(String userID, int lateDays);
     void reduceFine(String userID, double reduceAmount);

@@ -1,16 +1,13 @@
-import java.util.Scanner;
 import java.util.HashMap;
 import java.util.ArrayList;
 
 public class SmartLibrary implements LibraryADT {
     private BookBST catalogue;
-    private Scanner scanner;
     private HashMap<String, User> users = new HashMap<>();
     private UndoStack undoStack = new UndoStack();
 
     public SmartLibrary() {
         this.catalogue = new BookBST();
-        this.scanner = new Scanner(System.in);
     }
 
     @Override
@@ -31,17 +28,17 @@ public class SmartLibrary implements LibraryADT {
             return true;
         } 
         if(!existingUser.getUserRole().equalsIgnoreCase(role)) {
-            System.out.println("> user " + userID + " is already logged in with a different role.");
+            System.out.println("> User " + userID + " is already logged in with a different role.");
             return false;
         }
 
-        System.out.println("> welcome back, " + userID +  "(" + role + ").");
+        System.out.println("> Welcome back, " + userID +  ". You are logged in as a " + role + ".");
         return true;
     }
 
     public void registerUser(String userID, String role) {
         users.put(userID, new User(userID, role));
-        System.out.println("> welcome, " + userID + "! You have been registered as a " + role + ".");
+        System.out.println("> Welcome, " + userID +  ". You have been registered as a " + role + ".");
     }
 
     
@@ -58,7 +55,7 @@ public class SmartLibrary implements LibraryADT {
 
         if (catalogue.insert(newBook)) {
             undoStack.push(new UndoAction("Add_Book", new Book(newBook.getIsbn(), newBook.getTitle(), newBook.getAuthor()), null, 0.0));
-            System.out.println("> Book added successfully: ");
+            System.out.println("> Book added successfully: " + newBook.toString());
             return true;
         } 
         else {

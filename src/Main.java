@@ -77,7 +77,7 @@ public class Main {
             System.out.println("10. Return Book");
             System.out.println("11. View My Borrowing History");
             System.out.println("12. Check Fine Status");
-            System.out.println("13. Back");
+            System.out.println("13. Back to Main Menu");
             System.out.print("> Please select an option: ");
 
             int librarianChoice = readPositiveInt();
@@ -132,7 +132,7 @@ public class Main {
                     library.checkFineStatus(userID);
                     break;
                 case 13:
-                    System.out.println("> Exiting...");
+                    System.out.println("> Back to main menu...");
                     runningLibrarian = false;
                     break;
                 default:
@@ -153,7 +153,7 @@ public class Main {
             System.out.println("4. Return Book");
             System.out.println("5. View My Borrowing History");
             System.out.println("6. Check Fine Status");
-            System.out.println("7. Exit");
+            System.out.println("7. Back to Main Menu");
             System.out.print("> Please select an option: ");
 
             int studentChoice = readPositiveInt();
@@ -179,7 +179,7 @@ public class Main {
                     library.checkFineStatus(userID);
                     break;
                 case 7:
-                    System.out.println("> Exiting...");
+                    System.out.println("> Back to main menu...");
                     runningStudent = false;
                     break;
                 default:
@@ -211,6 +211,7 @@ public class Main {
                     library.checkFineStatus(userID);
                     break;
                 case 2:
+                    library.viewRegisteredUsers();
                     System.out.print("> Enter User ID to add fine: ");
                     String addFineUserID = readNonEmptyString();
                     System.out.print("> Enter number of late days: ");
@@ -218,6 +219,7 @@ public class Main {
                     library.addFine(addFineUserID, lateDays);
                     break;
                 case 3:
+                    library.viewRegisteredUsers();
                     System.out.print("> Enter User ID to reduce fine: ");
                     String reduceFineUserID = readNonEmptyString();
                     System.out.print("> Enter amount to reduce: ");

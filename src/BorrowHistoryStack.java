@@ -34,7 +34,7 @@ public class BorrowHistoryStack {
         }
     }
 
-    public boolean removeTopIfMatches(int isbn) {
+    public boolean removeTopIfMatches(long isbn) {
         if (isEmpty()) {
             return false;
         }

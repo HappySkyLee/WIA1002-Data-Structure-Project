@@ -1,11 +1,11 @@
 public class Book {
-    private final int isbn;
+    private final long isbn;
     private final String title;
     private final String author;
     private boolean borrowed;
     private String borrowBy;
 
-    public Book(int isbn, String title, String author){
+    public Book(long isbn, String title, String author){
         this.isbn = isbn;
         this.title = title;
         this.author = author;
@@ -13,7 +13,7 @@ public class Book {
         this.borrowBy = null;
     }
 
-    public int getIsbn(){
+    public long getIsbn(){
         return isbn;
     }
 

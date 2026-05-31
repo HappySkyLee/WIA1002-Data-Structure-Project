@@ -1,5 +1,5 @@
 public class BorrowHistory {
-    private int isbn;
+    private long isbn;
     private String title;
     private String author;
 
@@ -9,7 +9,7 @@ public class BorrowHistory {
         this.author = book.getAuthor();
     }
 
-    public int getIsbn() {
+    public long getIsbn() {
         return isbn;
     }
 

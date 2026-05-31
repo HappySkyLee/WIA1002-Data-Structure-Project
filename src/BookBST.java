@@ -3,6 +3,18 @@ import java.util.ArrayList;
 public class BookBST {
     private BookNode root;
 
+    private static class BookNode {
+        private Book book;
+        private BookNode left;
+        private BookNode right;
+
+        public BookNode(Book book) {
+            this.book = book;
+            this.left = null;
+            this.right = null;
+        }
+    }
+
     public BookBST() {
         this.root = null;
     }
@@ -34,11 +46,11 @@ public class BookBST {
     }
 
 
-    public Book searchByIsbn(int isbn) {
+    public Book searchByIsbn(long isbn) {
         return searchByIsbnRec(root, isbn);
     }
 
-    private Book searchByIsbnRec(BookNode current, int isbn) {
+    private Book searchByIsbnRec(BookNode current, long isbn) {
         if (current == null) {
             return null;
         }
@@ -54,7 +66,7 @@ public class BookBST {
         }
     }
 
-    public Book remove(int isbn) {
+    public Book remove(long isbn) {
         Book targetBook = searchByIsbn(isbn);
 
         if (targetBook == null) {
@@ -68,11 +80,10 @@ public class BookBST {
 
     }
 
-    private BookNode removeRec(BookNode current, int isbn) {
+    private BookNode removeRec(BookNode current, long isbn) {
         if (current == null) {
             return null;
         }
-
         if (isbn < current.book.getIsbn()) {
             current.left = removeRec(current.left, isbn);
         } 

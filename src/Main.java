@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
-    private static SmartLibrary library = new SmartLibrary();
+    private static LibraryADT library = new SmartLibrary();
 
     public static void main(String[] args) {
         logInMenu();
@@ -20,7 +20,7 @@ public class Main {
             System.out.println("3. Exit");
             System.out.print("> Please select an option: ");
 
-            int role = readInt();
+            int role = readPositiveInt();
             System.out.println();
 
             switch(role){
@@ -79,14 +79,14 @@ public class Main {
             System.out.println("12. Back");
             System.out.print("> Please select an option: ");
 
-            int librarianChoice = readInt();
+            int librarianChoice = readPositiveInt();
             System.out.println();
 
             switch(librarianChoice){
                 case 1:
                     System.out.println("> Adding Book");
                     System.out.print("> Enter ISBN: ");
-                    int addBookIsbn = readInt();
+                    long addBookIsbn = readPositiveLong();
                     System.out.print("> Enter Title of the book: ");
                     String title = scanner.nextLine();
                     System.out.print("> Enter Author: ");
@@ -97,7 +97,7 @@ public class Main {
                     System.out.println("> Removing Book");
                     library.viewAllBooks();
                     System.out.print("> Enter ISBN: ");
-                    int removeBookIsbn = readInt();
+                    long removeBookIsbn = readPositiveLong();
                     library.removeBook(removeBookIsbn);
                     break;
                 case 3:
@@ -152,7 +152,7 @@ public class Main {
             System.out.println("7. Exit");
             System.out.print("> Please select an option: ");
 
-            int studentChoice = readInt();
+            int studentChoice = readPositiveInt();
             System.out.println();
 
             switch(studentChoice){
@@ -196,7 +196,7 @@ public class Main {
             System.out.println("4. Back");
             System.out.print("> Please select an option: ");
 
-            int fineChoice = readInt();
+            int fineChoice = readPositiveInt();
             System.out.println();
 
             switch(fineChoice){
@@ -209,14 +209,14 @@ public class Main {
                     System.out.print("> Enter User ID to add fine: ");
                     userID = scanner.nextLine();
                     System.out.print("> Enter number of late days: ");
-                    int lateDays = readInt();
+                    int lateDays = readPositiveInt();
                     library.addFine(userID, lateDays);
                     break;
                 case 3:
                     System.out.print("> Enter User ID to reduce fine: ");
                     userID = scanner.nextLine();
                     System.out.print("> Enter amount to reduce: ");
-                    int amount = readInt();
+                    int amount = readPositiveInt();
                     library.reduceFine(userID, amount);
                     break;
                 case 4:
@@ -241,13 +241,13 @@ public class Main {
             System.out.println("4. Back");
             System.out.print("> Please select an option: ");
 
-            int searchChoice = readInt();
+            int searchChoice = readPositiveInt();
             System.out.println();
 
             switch(searchChoice){
                 case 1:
                     System.out.print("> Enter ISBN to search: ");
-                    int isbn = readInt();
+                    long isbn = readPositiveLong();
                     library.searchByIsbn(isbn);
                     break;
                 case 2:
@@ -271,24 +271,45 @@ public class Main {
     }
 
     private static void borrowBookMenu(String userID) {
-        System.out.print("> Enter ISBN of the book to borrow:");
-        int isbn = readInt();
+        System.out.print("> Enter ISBN of the book to borrow: ");
+        long isbn = readPositiveLong();
         library.borrowBook(isbn,userID);
     }
 
     private static void returnBookMenu(String userID) {
-        System.out.print("> Enter ISBN of the book to return:");
-        int isbn = readInt();
+        System.out.print("> Enter ISBN of the book to return: ");
+        long isbn = readPositiveLong();
         library.returnBook(isbn,userID);
 
     }
 
-    public static int readInt() {
+    public static int readPositiveInt() {
         while (true) {
             try {
                 int value = scanner.nextInt();
                 scanner.nextLine();
-                return value;
+                if (value > 0) {
+                    return value;
+                } else {
+                    System.out.println("Please enter a positive number.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine();
+            }
+        }
+    }
+
+    public static long readPositiveLong() {
+        while (true) {
+            try {
+                long value = scanner.nextLong();
+                scanner.nextLine();
+                if (value > 0) {
+                    return value;
+                } else {
+                    System.out.println("Please enter a positive number.");
+                }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a number.");
                 scanner.nextLine();
@@ -296,3 +317,4 @@ public class Main {
         }
     }
 }
+

@@ -54,7 +54,7 @@ public class User {
         System.out.printf("Fine: RM %.2f%n", fine);
     }
 
-    public boolean removeLatestBorrowHistoryIfMatches(int isbn) {
+    public boolean removeLatestBorrowHistoryIfMatches(long isbn) {
         return borrowHistory.removeTopIfMatches(isbn);
     }
 }

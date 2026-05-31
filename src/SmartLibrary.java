@@ -12,7 +12,7 @@ public class SmartLibrary implements LibraryADT {
 
     @Override
     public boolean logIn(String userID, String role) {
-        if(userID == null || role == null) {
+        if(userID == null || role == null || userID.trim().isEmpty() || role.trim().isEmpty()) {
             System.out.println("> User ID and role cannot be null.");
             return false;
         }
@@ -45,8 +45,8 @@ public class SmartLibrary implements LibraryADT {
     
 
     @Override
-    public boolean addBook(int isbn, String title, String author) {
-        if (isbn <= 0 || title == null || author == null) {
+    public boolean addBook(long isbn, String title, String author) {
+        if (isbn <= 0 || title == null || author == null|| title.trim().isEmpty() || author.trim().isEmpty()) {
             System.out.println("> Invalid book details. Please provide valid ISBN, title, and author.");
             return false;
         }
@@ -65,7 +65,7 @@ public class SmartLibrary implements LibraryADT {
     }
 
     @Override
-    public boolean removeBook(int isbn) {
+    public boolean removeBook(long isbn) {
         Book removedBook = catalogue.searchByIsbn(isbn);
 
         if (removedBook == null) {
@@ -90,7 +90,7 @@ public class SmartLibrary implements LibraryADT {
     }
 
     @Override
-    public void searchByIsbn(int isbn) {
+    public void searchByIsbn(long isbn) {
         Book foundBookByIsbn = catalogue.searchByIsbn(isbn);
 
         if (foundBookByIsbn != null) {
@@ -139,7 +139,7 @@ public class SmartLibrary implements LibraryADT {
 
 
     @Override
-    public boolean borrowBook(int isbn, String userID) {
+    public boolean borrowBook(long isbn, String userID) {
         User user = users.get(userID);
 
         if (user == null) {
@@ -168,7 +168,7 @@ public class SmartLibrary implements LibraryADT {
     }
 
     @Override
-    public boolean returnBook(int isbn, String userID) {
+    public boolean returnBook(long isbn, String userID) {
         User user = users.get(userID);
 
         if (user == null) {
@@ -182,7 +182,7 @@ public class SmartLibrary implements LibraryADT {
             System.out.println("> Book with ISBN " + isbn + " not found.");
             return false;
         }
-        else if (!returnedBook.getBorrowBy().equals(userID)) {
+        else if (!userID.equals(returnedBook.getBorrowBy())) {
             System.out.println("> Book is not currently borrowed by you.");
             return false;
         }
@@ -312,7 +312,7 @@ public class SmartLibrary implements LibraryADT {
     }
 
     private void undoAddBook(UndoAction lastAction) {
-        int isbn = lastAction.getBookSnapshot().getIsbn();
+        long isbn = lastAction.getBookSnapshot().getIsbn();
         Book addedBook = catalogue.searchByIsbn(isbn);
 
         if(addedBook == null) {
@@ -341,7 +341,7 @@ public class SmartLibrary implements LibraryADT {
     }
     
     private void undoBorrowBook(UndoAction lastAction) {
-        int isbn = lastAction.getBookSnapshot().getIsbn();
+        long isbn = lastAction.getBookSnapshot().getIsbn();
         Book borrowedBook = catalogue.searchByIsbn(isbn);
         User user = users.get(lastAction.getUserID());
 
@@ -366,7 +366,7 @@ public class SmartLibrary implements LibraryADT {
     }
     
     private void undoReturnBook(UndoAction lastAction) {
-        int isbn = lastAction.getBookSnapshot().getIsbn();
+        long isbn = lastAction.getBookSnapshot().getIsbn();
         Book returnedBook = catalogue.searchByIsbn(isbn);
 
         if (returnedBook == null) {

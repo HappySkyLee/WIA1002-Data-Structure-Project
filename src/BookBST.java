@@ -165,6 +165,33 @@ public class BookBST {
         }
     }
 
+    public void displayBorrowedBooksByUser(String userID) {
+        ArrayList<Book> borrowedBooks = new ArrayList<>();
+        displayBorrowedBooksByUserRec(root, userID, borrowedBooks);
+
+        if (borrowedBooks.isEmpty()) {
+            System.out.println("> No books are currently borrowed by user " + userID + ".");
+        }
+        else {
+            System.out.println("> Books currently borrowed by user " + userID + ":");
+            for (Book book : borrowedBooks) {
+                System.out.println(book.toString());
+            }
+        }
+    }
+
+    private void displayBorrowedBooksByUserRec(BookNode current, String userID, ArrayList<Book> borrowedBooks) {
+        if (current != null) {
+            displayBorrowedBooksByUserRec(current.left, userID, borrowedBooks);
+
+            if (current.book.isBorrowed() && userID.equals(current.book.getBorrowBy())) {
+                borrowedBooks.add(current.book);
+            }
+
+            displayBorrowedBooksByUserRec(current.right, userID, borrowedBooks);
+        }
+    }
+
 
     public ArrayList<Book> searchByAuthor(String author) {
         ArrayList<Book> booksByAuthor = new ArrayList<>();

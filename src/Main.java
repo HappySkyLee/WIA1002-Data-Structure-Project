@@ -42,7 +42,7 @@ public class Main {
 
     private static void logInAsLibrarian(){
         System.out.print("> Please enter your Librarian ID: ");
-        String librarianID = scanner.nextLine();
+        String librarianID = readNonEmptyString();
         if (library.logIn(librarianID, "Librarian")) {
             librarianMenu(librarianID);
         }
@@ -50,7 +50,7 @@ public class Main {
 
     private static void logInAsStudent(){
         System.out.print("> Please enter your Student ID: ");
-        String studentID = scanner.nextLine();
+        String studentID = readNonEmptyString();
         if (library.logIn(studentID, "Student")) {
             studentMenu(studentID);
         }
@@ -126,7 +126,7 @@ public class Main {
                     returnBookMenu(userID);
                     break;
                 case 11:
-                    library.viewOwnBorrowedBooks(userID);
+                    library.viewBorrowedBookHistory(userID);
                     break;
                 case 12:
                     library.checkFineStatus(userID);
@@ -173,7 +173,7 @@ public class Main {
                     returnBookMenu(userID);
                     break;
                 case 5:
-                    library.viewOwnBorrowedBooks(userID);
+                    library.viewBorrowedBookHistory(userID);
                     break;
                 case 6:
                     library.checkFineStatus(userID);
@@ -214,17 +214,23 @@ public class Main {
                     library.viewRegisteredUsers();
                     System.out.print("> Enter User ID to add fine: ");
                     String addFineUserID = readNonEmptyString();
+                    library.viewBorrowedBooksByUser(addFineUserID);
+                    System.out.print("> Enter book ISBN to add fine: ");
+                    long addFineIsbn = readPositiveLong();
                     System.out.print("> Enter number of late days: ");
                     int lateDays = readPositiveInt();
-                    library.addFine(addFineUserID, lateDays);
+                    library.addFine(addFineUserID, addFineIsbn, lateDays);
                     break;
                 case 3:
                     library.viewRegisteredUsers();
                     System.out.print("> Enter User ID to reduce fine: ");
                     String reduceFineUserID = readNonEmptyString();
+                    library.viewBorrowedBooksByUser(reduceFineUserID);
+                    System.out.print("> Enter book ISBN to reduce fine: ");
+                    long reduceFineIsbn = readPositiveLong();
                     System.out.print("> Enter amount to reduce: ");
-                    int amount = readPositiveInt();
-                    library.reduceFine(reduceFineUserID, amount);
+                    double amount = readPositiveDouble();
+                    library.reduceFine(reduceFineUserID, reduceFineIsbn, amount);
                     break;
                 case 4:
                     System.out.println("> Returning to previous menu...");
@@ -314,6 +320,24 @@ public class Main {
         while (true) {
             try {
                 long value = scanner.nextLong();
+                scanner.nextLine();
+                if (value > 0) {
+                    return value;
+                }
+                else {
+                    System.out.println("> Please enter a positive number.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("> Invalid input. Please enter a number.");
+                scanner.nextLine();
+            }
+        }
+    }
+
+    private static double readPositiveDouble() {
+        while (true) {
+            try {
+                double value = scanner.nextDouble();
                 scanner.nextLine();
                 if (value > 0) {
                     return value;

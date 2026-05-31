@@ -9,10 +9,11 @@ public interface LibraryADT {
     boolean returnBook(long isbn, String userID);
     void viewAllBooks();
     void viewAllBorrowedBooks();
-    void viewOwnBorrowedBooks(String userID);
+    void viewBorrowedBooksByUser(String userID);
+    void viewBorrowedBookHistory(String userID);
     void viewRegisteredUsers();
     void checkFineStatus(String userID);
-    void addFine(String userID, int lateDays);
-    void reduceFine(String userID, double reduceAmount);
+    void addFine(String userID, long isbn, int lateDays);
+    void reduceFine(String userID, long isbn, double reduceAmount);
     void undoLastAction();
 }

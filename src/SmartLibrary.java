@@ -216,7 +216,19 @@ public class SmartLibrary implements LibraryADT {
     }
 
     @Override
-    public void viewOwnBorrowedBooks(String userID) {
+    public void viewBorrowedBooksByUser(String userID) {
+        User user = users.get(userID);
+
+        if (user == null) {
+            System.out.println("> User not found.");
+            return;
+        }
+
+        catalogue.displayBorrowedBooksByUser(userID);
+    }
+
+    @Override
+    public void viewBorrowedBookHistory(String userID) {
         User user = users.get(userID);
 
         if (user == null) {
@@ -251,11 +263,18 @@ public class SmartLibrary implements LibraryADT {
     }
 
     @Override
-    public void addFine(String userID, int lateDays) {
+    public void addFine(String userID, long isbn, int lateDays) {
         User user = users.get(userID);
 
         if (user == null) {
             System.out.println("> User not found.");
+            return;
+        }
+
+        Book finedBook = catalogue.searchByIsbn(isbn);
+
+        if (finedBook == null) {
+            System.out.println("> Book with ISBN " + isbn + " not found.");
             return;
         }
 
@@ -265,28 +284,54 @@ public class SmartLibrary implements LibraryADT {
         }
         
         double fineAmount = lateDays * 1.0;
-        user.addFine(fineAmount);
-        undoStack.push(new UndoAction("Add_Fine", null, userID, fineAmount));
-        System.out.printf("> Fine added successfully. Current fine for user %s: RM %.2f", userID, user.getFine());
+        user.addFine(finedBook.getIsbn(), finedBook.getTitle(), lateDays, fineAmount);
+        undoStack.push(new UndoAction("Add_Fine", new Book(finedBook.getIsbn(), finedBook.getTitle(), finedBook.getAuthor()), userID, fineAmount, lateDays));
+        System.out.printf("> Fine added successfully. Total outstanding fine for user %s: RM %.2f", userID, user.getTotalFine());
         System.out.println();
     }
 
     @Override
-    public void reduceFine(String userID, double reduceAmount) {
+    public void reduceFine(String userID, long isbn, double reduceAmount) {
         User user = users.get(userID);
 
         if (user == null) {
             System.out.println("> User not found.");
             return;
         }
+
         if (reduceAmount <= 0) {
             System.out.println("> Amount must be greater than zero.");
             return;
         }
 
-        user.reduceFine(reduceAmount);
-        undoStack.push(new UndoAction("Reduce_Fine", null, userID, reduceAmount));
-        System.out.printf("> Fine reduced successfully. Current fine for user %s: RM %.2f", userID, user.getFine());
+        FineRecord fineRecord = user.findOutstandingFineByIsbn(isbn);
+
+        if (fineRecord == null) {
+            if (user.findFineRecordByIsbn(isbn) == null && catalogue.searchByIsbn(isbn) == null) {
+                System.out.println("> Book with ISBN " + isbn + " not found.");
+            } else {
+                System.out.println("> No outstanding fine found for ISBN " + isbn + ".");
+            }
+            return;
+        }
+
+        if (reduceAmount > fineRecord.getRemainingAmount()) {
+            System.out.printf("> Reduction amount exceeds outstanding fine. Outstanding fine for ISBN %d: RM %.2f%n", isbn, fineRecord.getRemainingAmount());
+            return;
+        }
+
+        Book catalogueBook = catalogue.searchByIsbn(isbn);
+        Book fineSnapshot;
+
+        if (catalogueBook != null) {
+            fineSnapshot = new Book(catalogueBook.getIsbn(), catalogueBook.getTitle(), catalogueBook.getAuthor());
+        } else {
+            fineSnapshot = new Book(fineRecord.getIsbn(), fineRecord.getTitle(), "Unknown");
+        }
+
+        user.reduceFine(isbn, reduceAmount);
+        undoStack.push(new UndoAction("Reduce_Fine", fineSnapshot, userID, reduceAmount));
+        System.out.printf("> Fine reduced successfully. Total outstanding fine for user %s: RM %.2f", userID, user.getTotalFine());
         System.out.println();
     }
 
@@ -411,8 +456,18 @@ public class SmartLibrary implements LibraryADT {
             return;
         }
 
-        user.reduceFine(lastAction.getAmount());
-        System.out.println("> Undo successful: Fine addition reversed.");
+        if (lastAction.getBookSnapshot() == null) {
+            System.out.println("> Undo failed: Fine book record not found.");
+            return;
+        }
+
+        boolean reversed = user.undoAddedFine(lastAction.getBookSnapshot().getIsbn(), lastAction.getLateDays(), lastAction.getAmount());
+
+        if (reversed) {
+            System.out.println("> Undo successful: Fine addition reversed.");
+        } else {
+            System.out.println("> Undo failed: Fine record not found.");
+        }
     }
 
     private void undoReduceFine(UndoAction lastAction) {
@@ -423,7 +478,17 @@ public class SmartLibrary implements LibraryADT {
             return;
         }
 
-        user.addFine(lastAction.getAmount());
-        System.out.println("> Undo successful: Fine reduction reversed.");
+        if (lastAction.getBookSnapshot() == null) {
+            System.out.println("> Undo failed: Fine book record not found.");
+            return;
+        }
+
+        boolean restored = user.restoreReducedFine(lastAction.getBookSnapshot().getIsbn(), lastAction.getAmount());
+
+        if (restored) {
+            System.out.println("> Undo successful: Fine reduction reversed.");
+        } else {
+            System.out.println("> Undo failed: Fine record not found.");
+        }
     }
 }

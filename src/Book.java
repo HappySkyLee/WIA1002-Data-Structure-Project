@@ -45,6 +45,6 @@ public class Book {
 
     @Override
     public String toString() {
-        return "ISBN: [" + isbn + "] Title: " + title + " by " + author + (borrowed ? " | (Borrowed by: " + borrowBy + ")" : " (Available)");
+        return "ISBN: [" + isbn + "] Title: " + title + " by " + author + (borrowed ? " | (Borrowed by: " + borrowBy + ")" : " | (Available)");
     }
 }

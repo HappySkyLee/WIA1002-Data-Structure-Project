@@ -12,10 +12,15 @@ public class SmartLibrary implements LibraryADT {
 
     @Override
     public boolean logIn(String userID, String role) {
-        if(userID == null || role == null || userID.trim().isEmpty() || role.trim().isEmpty()) {
-            System.out.println("> User ID and role cannot be null.");
+        if(userID == null || userID.trim().isEmpty()) {
+            System.out.println("> User ID cannot be empty.");
             return false;
         }
+        if(role == null || role.trim().isEmpty()) {
+            System.out.println("> Role cannot be empty.");
+            return false;
+        }
+
         if(!role.equalsIgnoreCase("Librarian") && !role.equalsIgnoreCase("Student")) {
             System.out.println("> Invalid role. Please enter 'Librarian' or 'Student'.");
             return false;
@@ -182,12 +187,12 @@ public class SmartLibrary implements LibraryADT {
             System.out.println("> Book with ISBN " + isbn + " not found.");
             return false;
         }
-        else if (!userID.equals(returnedBook.getBorrowBy())) {
-            System.out.println("> Book is not currently borrowed by you.");
-            return false;
-        }
         else if (!returnedBook.isBorrowed()) {
             System.out.println("> Book is not currently borrowed.");
+            return false;
+        }
+        else if (!userID.equals(returnedBook.getBorrowBy())) {
+            System.out.println("> Book is not currently borrowed by you.");
             return false;
         }
         else {
@@ -250,6 +255,7 @@ public class SmartLibrary implements LibraryADT {
         user.addFine(fineAmount);
         undoStack.push(new UndoAction("Add_Fine", null, userID, fineAmount));
         System.out.printf("> Fine added successfully. Current fine for user %s: RM %.2f", userID, user.getFine());
+        System.out.println();
     }
 
     @Override
@@ -268,6 +274,7 @@ public class SmartLibrary implements LibraryADT {
         user.reduceFine(reduceAmount);
         undoStack.push(new UndoAction("Reduce_Fine", null, userID, reduceAmount));
         System.out.printf("> Fine reduced successfully. Current fine for user %s: RM %.2f", userID, user.getFine());
+        System.out.println();
     }
 
     @Override

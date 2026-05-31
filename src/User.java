@@ -49,7 +49,7 @@ public class User {
     }
 
     public void displayFine() {
-        System.out.println("Current fine for user: " + userID);
+        System.out.println("User: " + userID);
         System.out.println("Role: " + userRole);
         System.out.printf("Fine: RM %.2f%n", fine);
     }

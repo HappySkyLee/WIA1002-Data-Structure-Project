@@ -88,9 +88,9 @@ public class Main {
                     System.out.print("> Enter ISBN: ");
                     long addBookIsbn = readPositiveLong();
                     System.out.print("> Enter Title of the book: ");
-                    String title = scanner.nextLine();
+                    String title = readNonEmptyString();
                     System.out.print("> Enter Author: ");
-                    String author = scanner.nextLine();
+                    String author = readNonEmptyString();
                     library.addBook(addBookIsbn, title, author);
                     break;
                 case 2:
@@ -202,22 +202,22 @@ public class Main {
             switch(fineChoice){
                 case 1:
                     System.out.print("> Enter User ID to check fine status: ");
-                    String userID = scanner.nextLine();
+                    String userID = readNonEmptyString();
                     library.checkFineStatus(userID);
                     break;
                 case 2:
                     System.out.print("> Enter User ID to add fine: ");
-                    userID = scanner.nextLine();
+                    String addFineUserID = readNonEmptyString();
                     System.out.print("> Enter number of late days: ");
                     int lateDays = readPositiveInt();
-                    library.addFine(userID, lateDays);
+                    library.addFine(addFineUserID, lateDays);
                     break;
                 case 3:
                     System.out.print("> Enter User ID to reduce fine: ");
-                    userID = scanner.nextLine();
+                    String reduceFineUserID = readNonEmptyString();
                     System.out.print("> Enter amount to reduce: ");
                     int amount = readPositiveInt();
-                    library.reduceFine(userID, amount);
+                    library.reduceFine(reduceFineUserID, amount);
                     break;
                 case 4:
                     System.out.println("> Returning to previous menu...");
@@ -252,12 +252,12 @@ public class Main {
                     break;
                 case 2:
                     System.out.print("> Enter Title to search: ");
-                    String title = scanner.nextLine();//input vadiation?
+                    String title = readNonEmptyString();
                     library.searchBooksByTitle(title);
                     break;
                 case 3:
                     System.out.print("> Enter Author to search: ");
-                    String author = scanner.nextLine();
+                    String author = readNonEmptyString();
                     library.searchBooksByAuthor(author);
                     break;
                 case 4:
@@ -271,6 +271,7 @@ public class Main {
     }
 
     private static void borrowBookMenu(String userID) {
+        library.viewAllBooks();
         System.out.print("> Enter ISBN of the book to borrow: ");
         long isbn = readPositiveLong();
         library.borrowBook(isbn,userID);
@@ -283,36 +284,50 @@ public class Main {
 
     }
 
-    public static int readPositiveInt() {
+    private static int readPositiveInt() {
         while (true) {
             try {
                 int value = scanner.nextInt();
                 scanner.nextLine();
                 if (value > 0) {
                     return value;
-                } else {
-                    System.out.println("Please enter a positive number.");
+                } 
+                
+                else {
+                    System.out.println(">Please enter a positive number.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number.");
+                System.out.println("> Invalid input. Please enter a number.");
                 scanner.nextLine();
             }
         }
     }
 
-    public static long readPositiveLong() {
+    private static long readPositiveLong() {
         while (true) {
             try {
                 long value = scanner.nextLong();
                 scanner.nextLine();
                 if (value > 0) {
                     return value;
-                } else {
-                    System.out.println("Please enter a positive number.");
+                }
+                else {
+                    System.out.println("> Please enter a positive number.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number.");
+                System.out.println("> Invalid input. Please enter a number.");
                 scanner.nextLine();
+            }
+        }
+    }
+
+    private static String readNonEmptyString() {
+        while (true) {
+            String input = scanner.nextLine().trim();
+            if (!input.isEmpty()) {
+                return input;
+            } else {
+                System.out.println("> Input cannot be empty. Please try again.");
             }
         }
     }

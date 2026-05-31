@@ -13,7 +13,6 @@ public class UndoStack {
 
     public UndoAction pop() {
         if (isEmpty()) {
-            System.out.println("> No actions available to undo.");
             return null;
         }
         return undoStack.remove(undoStack.size() - 1);

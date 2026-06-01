@@ -1,3 +1,4 @@
+//Stores book details and borrow status
 public class Book {
     private final long isbn;
     private final String title;
@@ -5,6 +6,7 @@ public class Book {
     private boolean borrowed;
     private String borrowBy;
 
+    //Constructor
     public Book(long isbn, String title, String author){
         this.isbn = isbn;
         this.title = title;
@@ -13,6 +15,7 @@ public class Book {
         this.borrowBy = null;
     }
 
+    //The Getter methods
     public long getIsbn(){
         return isbn;
     }
@@ -33,16 +36,19 @@ public class Book {
         return borrowBy;
     }
 
+    //Marks book borrowed
     public void borrowBook(String userID){
             this.borrowed = true;
             this.borrowBy = userID;
     }
 
+    //Marks book returned
     public void returnBook() {
             this.borrowed = false;
             this.borrowBy = null;
     }
 
+    //Formats book details for display
     @Override
     public String toString() {
         return "ISBN: [" + isbn + "] Title: " + title + " by " + author + (borrowed ? " | (Borrowed by: " + borrowBy + ")" : " | (Available)");

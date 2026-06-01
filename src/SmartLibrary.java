@@ -1,15 +1,31 @@
 import java.util.HashMap;
 import java.util.ArrayList;
 
+//Manages library books, users, fines and undo actions
 public class SmartLibrary implements LibraryADT {
     private BookBST catalogue;
     private HashMap<String, User> users = new HashMap<>();
     private UndoStack undoStack = new UndoStack();
 
+    //Constructor
     public SmartLibrary() {
         this.catalogue = new BookBST();
+
+        // Preload sample data for testing and demo purposes only
+        // catalogue.insert(new Book(1047, "Data Structures", "Alex Tan"));
+        // catalogue.insert(new Book(1024, "Introduction to Python", "Alex Lee"));
+        // catalogue.insert(new Book(1068, "Database Systems", "Alex Tan"));
+        // catalogue.insert(new Book(1015, "Java Programming Basics", "Siti Aminah"));
+        // catalogue.insert(new Book(1036, "Introduction to Java", "John Tan"));
+        // catalogue.insert(new Book(1052, "The Missing Semester", "Bruce Lee"));
+        // catalogue.insert(new Book(1079, "Operating Systems", "Maria Wong"));
+
+        // users.put("S001", new User("S001", "Student"));
+        // users.put("L001", new User("L001", "Librarian"));
+        // System.out.println("> Sample data preloaded.");
     }
 
+    //Login as a user. If user does not exist, register as new user.
     @Override
     public boolean logIn(String userID, String role) {
         if(userID == null || userID.trim().isEmpty()) {
@@ -41,14 +57,15 @@ public class SmartLibrary implements LibraryADT {
         return true;
     }
 
-    public void registerUser(String userID, String role) {
+    //Registers a new user
+    private void registerUser(String userID, String role) {
         users.put(userID, new User(userID, role));
         System.out.println("> Welcome, " + userID +  ". You have been registered as a " + role + ".");
     }
 
     
     
-
+    //Add a book to BST and push undo action to stack
     @Override
     public boolean addBook(long isbn, String title, String author) {
         if (isbn <= 0 || title == null || author == null|| title.trim().isEmpty() || author.trim().isEmpty()) {
@@ -69,6 +86,7 @@ public class SmartLibrary implements LibraryADT {
         }
     }
 
+    //Removes a book from BST and push undo action to stack
     @Override
     public boolean removeBook(long isbn) {
         Book removedBook = catalogue.searchByIsbn(isbn);
@@ -84,7 +102,7 @@ public class SmartLibrary implements LibraryADT {
 
         if (catalogue.remove(isbn) != null) {
             undoStack.push(new UndoAction("Remove_Book", new Book(removedBook.getIsbn(), removedBook.getTitle(), removedBook.getAuthor()), null, 0.0));
-            System.out.println("> Book removed successfully: ");
+            System.out.println("> Book removed successfully: " + removedBook.toString());
             return true;
         } 
         else {
@@ -94,6 +112,7 @@ public class SmartLibrary implements LibraryADT {
         
     }
 
+    //Searches by ISBN and displays book details
     @Override
     public void searchByIsbn(long isbn) {
         Book foundBookByIsbn = catalogue.searchByIsbn(isbn);
@@ -106,6 +125,7 @@ public class SmartLibrary implements LibraryADT {
         }
     }
 
+    //Searches by title and displays book details
     @Override
     public void searchBooksByTitle(String title) {
         if (title == null) {
@@ -118,6 +138,7 @@ public class SmartLibrary implements LibraryADT {
         displayBooks(foundBookByTitle);
     }
 
+    //Searches by author and displays book details
     @Override
     public void searchBooksByAuthor(String author) {
         if (author == null) {
@@ -130,6 +151,7 @@ public class SmartLibrary implements LibraryADT {
         displayBooks(foundBookByAuthor);
     }
 
+    //Displays book list for ArrayList<Book> results from search by title or author
     private void displayBooks(ArrayList<Book> books) {
         if (books.isEmpty()) {
             System.out.println("> No books found.");
@@ -142,7 +164,7 @@ public class SmartLibrary implements LibraryADT {
         }
     }
 
-
+    //Borrows a book if available, updates user's borrow history and push undo action to stack
     @Override
     public boolean borrowBook(long isbn, String userID) {
         User user = users.get(userID);
@@ -172,6 +194,7 @@ public class SmartLibrary implements LibraryADT {
         
     }
 
+    //Returns a book if it is currently borrowed by the user and push undo action to stack
     @Override
     public boolean returnBook(long isbn, String userID) {
         User user = users.get(userID);
@@ -205,16 +228,19 @@ public class SmartLibrary implements LibraryADT {
         }
     }
 
+    //Views all books in the library
     @Override
     public void viewAllBooks() {
         catalogue.displayAll();
     }
 
+    //Views all borrowed books for librarian
     @Override
     public void viewAllBorrowedBooks() {
         catalogue.displayBorrowedBooks();
     }
 
+    //Views currently borrowed books by user 
     @Override
     public void viewBorrowedBooksByUser(String userID) {
         User user = users.get(userID);
@@ -227,6 +253,7 @@ public class SmartLibrary implements LibraryADT {
         catalogue.displayBorrowedBooksByUser(userID);
     }
 
+    //Views borrow history for a user
     @Override
     public void viewBorrowedBookHistory(String userID) {
         User user = users.get(userID);
@@ -238,6 +265,7 @@ public class SmartLibrary implements LibraryADT {
         user.displayBorrowHistory();
     }
 
+    //Views all registered users for librarian
     @Override
     public void viewRegisteredUsers() {
         if (users.isEmpty()) {
@@ -251,6 +279,7 @@ public class SmartLibrary implements LibraryADT {
         }
     }
 
+    //Checks fine status for a user
     @Override
     public void checkFineStatus(String userID) {
         User user = users.get(userID);
@@ -262,6 +291,7 @@ public class SmartLibrary implements LibraryADT {
         user.displayFine();
     }
 
+    //Adds a fine for a user and push undo action to stack
     @Override
     public void addFine(String userID, long isbn, int lateDays) {
         User user = users.get(userID);
@@ -284,12 +314,14 @@ public class SmartLibrary implements LibraryADT {
         }
         
         double fineAmount = lateDays * 1.0;
+
         user.addFine(finedBook.getIsbn(), finedBook.getTitle(), lateDays, fineAmount);
         undoStack.push(new UndoAction("Add_Fine", new Book(finedBook.getIsbn(), finedBook.getTitle(), finedBook.getAuthor()), userID, fineAmount, lateDays));
         System.out.printf("> Fine added successfully. Total outstanding fine for user %s: RM %.2f", userID, user.getTotalFine());
         System.out.println();
     }
 
+    //Reduces a fine for a user and push undo action to stack
     @Override
     public void reduceFine(String userID, long isbn, double reduceAmount) {
         User user = users.get(userID);
@@ -325,7 +357,8 @@ public class SmartLibrary implements LibraryADT {
 
         if (catalogueBook != null) {
             fineSnapshot = new Book(catalogueBook.getIsbn(), catalogueBook.getTitle(), catalogueBook.getAuthor());
-        } else {
+        } 
+        else {
             fineSnapshot = new Book(fineRecord.getIsbn(), fineRecord.getTitle(), "Unknown");
         }
 
@@ -335,6 +368,7 @@ public class SmartLibrary implements LibraryADT {
         System.out.println();
     }
 
+    //Undo last action
     @Override
     public void undoLastAction() {
         UndoAction lastAction = undoStack.pop();
@@ -376,6 +410,7 @@ public class SmartLibrary implements LibraryADT {
 
     }
 
+    //Undo added book 
     private void undoAddBook(UndoAction lastAction) {
         long isbn = lastAction.getBookSnapshot().getIsbn();
         Book addedBook = catalogue.searchByIsbn(isbn);
@@ -394,6 +429,7 @@ public class SmartLibrary implements LibraryADT {
         System.out.println("> Undo successful: Added book removed.");
     }
 
+    //Undo removed book
     private void undoRemoveBook(UndoAction lastAction) {
         Book bookToRestore = lastAction.getBookSnapshot();
 
@@ -405,6 +441,7 @@ public class SmartLibrary implements LibraryADT {
         }
     }
     
+    //Undo borrowed book
     private void undoBorrowBook(UndoAction lastAction) {
         long isbn = lastAction.getBookSnapshot().getIsbn();
         Book borrowedBook = catalogue.searchByIsbn(isbn);
@@ -430,6 +467,7 @@ public class SmartLibrary implements LibraryADT {
         System.out.println("> Undo successful: Book borrow reversed.");
     }
     
+    //Undo returned book
     private void undoReturnBook(UndoAction lastAction) {
         long isbn = lastAction.getBookSnapshot().getIsbn();
         Book returnedBook = catalogue.searchByIsbn(isbn);
@@ -448,6 +486,7 @@ public class SmartLibrary implements LibraryADT {
         System.out.println("> Undo successful: Book return reversed.");
     }
 
+    //Undo added fine
     private void undoAddFine(UndoAction lastAction) {
         User user = users.get(lastAction.getUserID());
 
@@ -470,6 +509,7 @@ public class SmartLibrary implements LibraryADT {
         }
     }
 
+    //Undo reduced fine
     private void undoReduceFine(UndoAction lastAction) {
         User user = users.get(lastAction.getUserID());
 
@@ -491,4 +531,5 @@ public class SmartLibrary implements LibraryADT {
             System.out.println("> Undo failed: Fine record not found.");
         }
     }
+
 }

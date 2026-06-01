@@ -1,9 +1,11 @@
+//Stores fine details for a book
 public class FineRecord {
     private final long isbn;
     private final String title;
     private int lateDays;
     private double remainingAmount;
 
+    //Constructor
     public FineRecord(long isbn, String title, int lateDays, double remainingAmount) {
         this.isbn = isbn;
         this.title = title;
@@ -11,6 +13,7 @@ public class FineRecord {
         this.remainingAmount = remainingAmount;
     }
 
+    //The Getter methods
     public long getIsbn() {
         return isbn;
     }
@@ -27,10 +30,12 @@ public class FineRecord {
         return remainingAmount;
     }
 
+    //Checks unpaid fine
     public boolean hasOutstandingFine() {
         return remainingAmount > 0;
     }
 
+    //Adds fine amount
     public void addFine(int additionalLateDays, double amount) {
         if (additionalLateDays > 0) {
             lateDays += additionalLateDays;
@@ -41,6 +46,7 @@ public class FineRecord {
         }
     }
 
+    //Reduces fine amount
     public boolean reduceAmount(double amount) {
         if (amount <= 0 || amount > remainingAmount) {
             return false;
@@ -53,12 +59,14 @@ public class FineRecord {
         return true;
     }
 
+    //Restores fine amount
     public void restoreAmount(double amount) {
         if (amount > 0) {
             remainingAmount += amount;
         }
     }
 
+    //Reverses added fine by reducing the fine amount and late days.
     public void reverseAddedFine(int lateDaysToRemove, double amountToRemove) {
         if (lateDaysToRemove > 0) {
             lateDays -= lateDaysToRemove;

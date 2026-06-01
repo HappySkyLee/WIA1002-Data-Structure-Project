@@ -1,13 +1,16 @@
 import java.util.ArrayList;
 
+//Stores books title and author indexed by ISBN in a binary search tree
 public class BookBST {
     private BookNode root;
 
+    //Tree node
     private static class BookNode {
         private Book book;
         private BookNode left;
         private BookNode right;
 
+        //Constructor
         public BookNode(Book book) {
             this.book = book;
             this.left = null;
@@ -15,11 +18,13 @@ public class BookBST {
         }
     }
 
+    //Constructor
     public BookBST() {
         this.root = null;
     }
 
 
+    //Inserts a book
     public boolean insert(Book book) {
         if (searchByIsbn(book.getIsbn()) != null) {
             System.out.println("Book with ISBN " + book.getIsbn() + " already exists.");
@@ -30,6 +35,7 @@ public class BookBST {
         return true;
     }
 
+    //Inserts recursively
     private BookNode insertRec(BookNode current, Book book) {
         if (current == null) {
             return new BookNode(book);
@@ -46,10 +52,12 @@ public class BookBST {
     }
 
 
+    //Searches by ISBN
     public Book searchByIsbn(long isbn) {
         return searchByIsbnRec(root, isbn);
     }
 
+    //Searches recursively
     private Book searchByIsbnRec(BookNode current, long isbn) {
         if (current == null) {
             return null;
@@ -66,6 +74,7 @@ public class BookBST {
         }
     }
 
+    //Removes a book
     public Book remove(long isbn) {
         Book targetBook = searchByIsbn(isbn);
 
@@ -80,6 +89,7 @@ public class BookBST {
 
     }
 
+    //Removes recursively
     private BookNode removeRec(BookNode current, long isbn) {
         if (current == null) {
             return null;
@@ -91,19 +101,20 @@ public class BookBST {
             current.right = removeRec(current.right, isbn);
         } 
         else {
-            
+            //No children
             if (current.left == null && current.right == null) {
                 return null;
             }
             
+            //One child
             if (current.left == null) {
                 return current.right;
             }
-
             if (current.right == null) {
                 return current.left;
             }
 
+            //Two children
             Book smallestBook = findSmallestBook(current.right);
             current.book = smallestBook;
             current.right = removeRec(current.right, smallestBook.getIsbn());
@@ -111,6 +122,7 @@ public class BookBST {
         return current;
     }
 
+    //Find the smallest book in right subtree to replace the removed node 
     private Book findSmallestBook(BookNode current) {
         while (current.left != null) {
             current = current.left;
@@ -119,6 +131,7 @@ public class BookBST {
     }
 
 
+    //Displays all books
     public void displayAll() {
         if (root == null) {
             System.out.println("No books in the library.");
@@ -129,6 +142,7 @@ public class BookBST {
         displayInOrderRec(root);
     }
 
+    //Displays in order
     private void displayInOrderRec(BookNode current) {
         if (current != null) {
             displayInOrderRec(current.left);
@@ -137,7 +151,7 @@ public class BookBST {
         }
     }
 
-
+    //Displays borrowed books
     public void displayBorrowedBooks() {
         ArrayList<Book> borrowedBooks = new ArrayList<>();
         displayBorrowedBooksRec(root, borrowedBooks);
@@ -153,6 +167,7 @@ public class BookBST {
         }
     }
 
+    //Displays borrowed books recursively
     private void displayBorrowedBooksRec(BookNode current, ArrayList<Book> borrowedBooks) {
         if (current != null) {
             displayBorrowedBooksRec(current.left, borrowedBooks);
@@ -165,6 +180,7 @@ public class BookBST {
         }
     }
 
+    //Displays borrowed books by user
     public void displayBorrowedBooksByUser(String userID) {
         ArrayList<Book> borrowedBooks = new ArrayList<>();
         displayBorrowedBooksByUserRec(root, userID, borrowedBooks);
@@ -180,6 +196,7 @@ public class BookBST {
         }
     }
 
+    //Displays borrowed books by user recursively
     private void displayBorrowedBooksByUserRec(BookNode current, String userID, ArrayList<Book> borrowedBooks) {
         if (current != null) {
             displayBorrowedBooksByUserRec(current.left, userID, borrowedBooks);
@@ -193,6 +210,7 @@ public class BookBST {
     }
 
 
+    //Searches by author
     public ArrayList<Book> searchByAuthor(String author) {
         ArrayList<Book> booksByAuthor = new ArrayList<>();
 
@@ -206,6 +224,7 @@ public class BookBST {
         return booksByAuthor;
     }
 
+    //Searches authors recursively
     private void searchByAuthorRec(BookNode current, String author, ArrayList<Book> booksByAuthor) {
         if (current != null) {
             searchByAuthorRec(current.left, author, booksByAuthor);
@@ -220,6 +239,7 @@ public class BookBST {
         }
     }
     
+    //Searches by title
     public ArrayList<Book> searchByTitle(String title) {
         ArrayList<Book> booksByTitle = new ArrayList<>();
 
@@ -233,6 +253,7 @@ public class BookBST {
         return booksByTitle;
     }
 
+    //Searches titles recursively
     private void searchByTitleRec(BookNode current, String title, ArrayList<Book> booksByTitle) {
         if (current != null) {
             searchByTitleRec(current.left, title, booksByTitle);

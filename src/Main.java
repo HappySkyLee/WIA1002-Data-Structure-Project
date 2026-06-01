@@ -9,6 +9,7 @@ public class Main {
         logInMenu();
     }
 
+    //Shows login menu
     private static void logInMenu(){
         boolean runningLogIn = true;
 
@@ -40,6 +41,7 @@ public class Main {
         }    
     }
 
+    //Logs in librarian
     private static void logInAsLibrarian(){
         System.out.print("> Please enter your Librarian ID: ");
         String librarianID = readNonEmptyString();
@@ -48,6 +50,7 @@ public class Main {
         }
     }
 
+    //Logs in student
     private static void logInAsStudent(){
         System.out.print("> Please enter your Student ID: ");
         String studentID = readNonEmptyString();
@@ -56,6 +59,7 @@ public class Main {
         }
     }
 
+    //Shows librarian menu
     private static void librarianMenu(String userID){
         boolean runningLibrarian = true;
 
@@ -141,6 +145,7 @@ public class Main {
         }
     }
 
+    //Shows student menu
     private static void studentMenu(String userID){
         boolean runningStudent = true;
 
@@ -188,6 +193,7 @@ public class Main {
         }
     }
 
+    //Shows fine management submenu
     private static void fineManagementMenu(){
         boolean runningFineManagement = true;
 
@@ -242,6 +248,7 @@ public class Main {
         }
     }
 
+    //Shows search submenu
     private static void searchBooksMenu(){
         boolean runningSearch = true;
 
@@ -283,6 +290,7 @@ public class Main {
         }
     }
 
+    //Submenu for handling book borrowing
     private static void borrowBookMenu(String userID) {
         library.viewAllBooks();
         System.out.print("> Enter ISBN of the book to borrow: ");
@@ -290,6 +298,7 @@ public class Main {
         library.borrowBook(isbn,userID);
     }
 
+    //Submenu for handling book return
     private static void returnBookMenu(String userID) {
         System.out.print("> Enter ISBN of the book to return: ");
         long isbn = readPositiveLong();
@@ -297,6 +306,7 @@ public class Main {
 
     }
 
+    //Reads positive integer input from user with validation specifically for menu selection and late days input
     private static int readPositiveInt() {
         while (true) {
             try {
@@ -316,6 +326,7 @@ public class Main {
         }
     }
 
+    //Reads positive long input from user with validation specifically for ISBN
     private static long readPositiveLong() {
         while (true) {
             try {
@@ -334,6 +345,7 @@ public class Main {
         }
     }
 
+    //Reads positive decimal input from user with validation specifically for fine amount input
     private static double readPositiveDouble() {
         while (true) {
             try {
@@ -352,6 +364,7 @@ public class Main {
         }
     }
 
+    //Reads non-empty text input from user with validation specifically for string inputs like title, author and user ID.
     private static String readNonEmptyString() {
         while (true) {
             String input = scanner.nextLine().trim();

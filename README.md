@@ -49,13 +49,39 @@ When the program starts, choose a role:
 3. Exit
 ```
 
-Enter any non-empty user ID when prompted. If the ID does not exist yet, the program automatically registers it under the selected role. The same ID must be used with the same role in later logins during the same program session.
+Enter any non-empty user ID and password when prompted. If the ID does not exist yet, the program automatically registers it under the selected role with the entered password. If the ID already exists, the same role and correct password must be entered to log in.
+
+One user ID can only have one role. For example, if `S001` is registered as a Librarian, `S001` cannot register again as a Student during the same program session.
+
+### Password Login Guide
+
+After choosing a role, the program asks for both ID and password:
+
+```text
+> Please enter your Librarian ID:
+> Please enter your Password:
+```
+
+For students, the prompt is:
+
+```text
+> Please enter your Student ID:
+> Please enter your Password:
+```
+
+Password rules:
+
+- Password cannot be empty.
+- New users are registered automatically with the entered password.
+- Existing users must enter the same password used during registration.
+- If the password is wrong, login is rejected.
+- If the user ID already belongs to another role, login or registration is rejected.
 
 ---
 
 ### Librarian Guide
 
-Enter `1` to choose `1. Librarian` from the main menu, then enter a Librarian ID.
+Enter `1` to choose `1. Librarian` from the main menu, then enter a Librarian ID and password.
 
 Librarian options:
 
@@ -93,7 +119,7 @@ The fine is calculated as RM 1.00 per late day.
 
 ### Student Guide
 
-Enter `2` to choose `2. Student` from the main menu, then enter a Student ID.
+Enter `2` to choose `2. Student` from the main menu, then enter a Student ID and password.
 
 Student options:
 
@@ -153,6 +179,7 @@ Undo may fail if the current state no longer allows the reversal, such as trying
 3. Exit
 > Please select an option: 1
 > Please enter your Librarian ID: L001
+> Please enter your Password: libpass
 
 >> Librarian Menu:
 1. Add Book

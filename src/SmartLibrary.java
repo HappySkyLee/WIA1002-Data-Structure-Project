@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class SmartLibrary implements LibraryADT {
     private BookBST catalogue;
     private HashMap<String, User> users = new HashMap<>();
+    private HashMap<String, String> userPasswords = new HashMap<>();
     private UndoStack undoStack = new UndoStack();
 
     //Constructor
@@ -21,13 +22,15 @@ public class SmartLibrary implements LibraryADT {
         // catalogue.insert(new Book(1079, "Operating Systems", "Maria Wong"));
 
         // users.put("S001", new User("S001", "Student"));
+        // userPasswords.put("S001", "password");
         // users.put("L001", new User("L001", "Librarian"));
+        // userPasswords.put("L001", "password");
         // System.out.println("> Sample data preloaded.");
     }
 
     //Login as a user. If user does not exist, register as new user.
     @Override
-    public boolean logIn(String userID, String role) {
+    public boolean logIn(String userID, String role, String password) {
         if(userID == null || userID.trim().isEmpty()) {
             System.out.println("> User ID cannot be empty.");
             return false;
@@ -36,34 +39,63 @@ public class SmartLibrary implements LibraryADT {
             System.out.println("> Role cannot be empty.");
             return false;
         }
+        if(password == null || password.trim().isEmpty()) {
+            System.out.println("> Password cannot be empty.");
+            return false;
+        }
 
-        if(!role.equalsIgnoreCase("Librarian") && !role.equalsIgnoreCase("Student")) {
+        String normalizedRole = normalizeRole(role);
+
+        if(normalizedRole == null) {
             System.out.println("> Invalid role. Please enter 'Librarian' or 'Student'.");
             return false;
         }
 
-        User existingUser = users.get(userID);
+        String cleanUserID = userID.trim();
+        String cleanPassword = password.trim();
+        User existingUser = users.get(cleanUserID);
 
         if(existingUser == null){
-            registerUser(userID, role);
+            registerUser(cleanUserID, normalizedRole, cleanPassword);
             return true;
-        } 
-        if(!existingUser.getUserRole().equalsIgnoreCase(role)) {
-            System.out.println("> User " + userID + " is already logged in with a different role.");
+        }
+
+        if(!existingUser.getUserRole().equalsIgnoreCase(normalizedRole)) {
+            System.out.println("> User " + cleanUserID + " is already registered as a " + existingUser.getUserRole() + ".");
             return false;
         }
 
-        System.out.println("> Welcome back, " + userID +  ". You are logged in as a " + role + ".");
+        if(!cleanPassword.equals(userPasswords.get(cleanUserID))) {
+            System.out.println("> Incorrect password for user " + cleanUserID + ".");
+            return false;
+        }
+
+        System.out.println("> Welcome back, " + cleanUserID +  ". You are logged in as a " + normalizedRole + ".");
         return true;
     }
 
     //Registers a new user
-    private void registerUser(String userID, String role) {
+    private void registerUser(String userID, String role, String password) {
         users.put(userID, new User(userID, role));
+        userPasswords.put(userID, password);
         System.out.println("> Welcome, " + userID +  ". You have been registered as a " + role + ".");
     }
 
-    
+    private String normalizeRole(String role) {
+        if (role == null) {
+            return null;
+        }
+
+        if (role.equalsIgnoreCase("Librarian")) {
+            return "Librarian";
+        }
+
+        if (role.equalsIgnoreCase("Student")) {
+            return "Student";
+        }
+
+        return null;
+    }
     
     //Add a book to BST and push undo action to stack
     @Override
@@ -446,6 +478,11 @@ public class SmartLibrary implements LibraryADT {
         long isbn = lastAction.getBookSnapshot().getIsbn();
         Book borrowedBook = catalogue.searchByIsbn(isbn);
         User user = users.get(lastAction.getUserID());
+
+        if (user == null) {
+            System.out.println("> User not found. Cannot undo borrow book action.");
+            return;
+        }
 
         if (borrowedBook == null) {
             System.out.println("> Book not found. Cannot undo borrow book action.");

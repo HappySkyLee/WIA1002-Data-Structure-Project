@@ -45,7 +45,9 @@ public class Main {
     private static void logInAsLibrarian(){
         System.out.print("> Please enter your Librarian ID: ");
         String librarianID = readNonEmptyString();
-        if (library.logIn(librarianID, "Librarian")) {
+        System.out.print("> Please enter your Password: ");
+        String password = readNonEmptyString();
+        if (library.logIn(librarianID, "Librarian", password)) {
             librarianMenu(librarianID);
         }
     }
@@ -54,7 +56,9 @@ public class Main {
     private static void logInAsStudent(){
         System.out.print("> Please enter your Student ID: ");
         String studentID = readNonEmptyString();
-        if (library.logIn(studentID, "Student")) {
+        System.out.print("> Please enter your Password: ");
+        String password = readNonEmptyString();
+        if (library.logIn(studentID, "Student", password)) {
             studentMenu(studentID);
         }
     }
@@ -295,14 +299,14 @@ public class Main {
         library.viewAllBooks();
         System.out.print("> Enter ISBN of the book to borrow: ");
         long isbn = readPositiveLong();
-        library.borrowBook(isbn,userID);
+        library.borrowBook(isbn, userID);
     }
 
     //Submenu for handling book return
     private static void returnBookMenu(String userID) {
         System.out.print("> Enter ISBN of the book to return: ");
         long isbn = readPositiveLong();
-        library.returnBook(isbn,userID);
+        library.returnBook(isbn, userID);
 
     }
 

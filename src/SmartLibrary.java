@@ -77,6 +77,7 @@ public class SmartLibrary implements LibraryADT {
         System.out.println("> Welcome, " + userID +  ". You have been registered as a " + role + ".");
     }
 
+    //Normalizes role input to standard format
     private String normalizeRole(String role) {
         if (role == null) {
             return null;

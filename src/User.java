@@ -31,6 +31,7 @@ public class User {
         return this.password.equals(password);
     }
 
+    //Calculates total outstanding fine by summing up all fine records
     public double getTotalFine() {
         double totalFine = 0.0;
 

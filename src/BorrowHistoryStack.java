@@ -1,17 +1,17 @@
-import java.util.ArrayList;
+import java.util.Stack;
 
 //Stores borrowing history in stack order
 public class BorrowHistoryStack {
-    private ArrayList<BorrowHistory> historyStack;
+    private Stack<BorrowHistory> historyStack;
 
     //Constructor
     public BorrowHistoryStack() {
-        historyStack = new ArrayList<>();
+        historyStack = new Stack<>();
     }
 
     //Pushes history record
     public void push(BorrowHistory record) {
-        historyStack.add(record);
+        historyStack.push(record);
     }
 
     //Deletes the top history record
@@ -20,7 +20,7 @@ public class BorrowHistoryStack {
             System.out.println("> No borrowing history available.");
             return null;
         }
-        return historyStack.remove(historyStack.size() - 1);
+        return historyStack.pop();
     }
 
     //Checks if stack is empty
@@ -46,7 +46,7 @@ public class BorrowHistoryStack {
             return false;
         }
 
-        BorrowHistory latestRecord = historyStack.get(historyStack.size() - 1);
+        BorrowHistory latestRecord = historyStack.peek();
 
         if (latestRecord.getIsbn() == isbn) {
             pop();

@@ -4,13 +4,15 @@ import java.util.ArrayList;
 public class User {
     private String userID;
     private String userRole;
+    private String password;
     private ArrayList<FineRecord> fineRecords;
     private BorrowHistoryStack borrowHistory;
 
     //Constructor
-    public User(String userID, String userRole) {
+    public User(String userID, String userRole, String password) {
         this.userID = userID;
         this.userRole = userRole;
+        this.password = password;
         this.fineRecords = new ArrayList<>();
         this.borrowHistory = new BorrowHistoryStack();
     }
@@ -22,6 +24,11 @@ public class User {
 
     public String getUserRole() {
         return userRole;
+    }
+
+    //Checks whether the entered password matches this user
+    public boolean isPasswordCorrect(String password) {
+        return this.password.equals(password);
     }
 
     public double getTotalFine() {

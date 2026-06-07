@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class SmartLibrary implements LibraryADT {
     private BookBST catalogue;
     private HashMap<String, User> users = new HashMap<>();
-    private HashMap<String, String> userPasswords = new HashMap<>();
     private UndoStack undoStack = new UndoStack();
 
     //Constructor
@@ -13,19 +12,17 @@ public class SmartLibrary implements LibraryADT {
         this.catalogue = new BookBST();
 
         // Preload sample data for testing and demo purposes only
-        // catalogue.insert(new Book(1047, "Data Structures", "Alex Tan"));
-        // catalogue.insert(new Book(1024, "Introduction to Python", "Alex Lee"));
-        // catalogue.insert(new Book(1068, "Database Systems", "Alex Tan"));
-        // catalogue.insert(new Book(1015, "Java Programming Basics", "Siti Aminah"));
-        // catalogue.insert(new Book(1036, "Introduction to Java", "John Tan"));
-        // catalogue.insert(new Book(1052, "The Missing Semester", "Bruce Lee"));
-        // catalogue.insert(new Book(1079, "Operating Systems", "Maria Wong"));
+        catalogue.insert(new Book(1047, "Data Structures", "Alex Tan"));
+        catalogue.insert(new Book(1024, "Introduction to Python", "Alex Lee"));
+        catalogue.insert(new Book(1068, "Database Systems", "Alex Tan"));
+        catalogue.insert(new Book(1015, "Java Programming Basics", "Siti Aminah"));
+        catalogue.insert(new Book(1036, "Introduction to Java", "John Tan"));
+        catalogue.insert(new Book(1052, "The Missing Semester", "Bruce Lee"));
+        catalogue.insert(new Book(1079, "Operating Systems", "Maria Wong"));
 
-        // users.put("S001", new User("S001", "Student"));
-        // userPasswords.put("S001", "password");
-        // users.put("L001", new User("L001", "Librarian"));
-        // userPasswords.put("L001", "password");
-        // System.out.println("> Sample data preloaded.");
+        users.put("S001", new User("S001", "Student", "password"));
+        users.put("L001", new User("L001", "Librarian", "password"));
+        System.out.println("> Sample data preloaded.");
     }
 
     //Login as a user. If user does not exist, register as new user.
@@ -65,7 +62,7 @@ public class SmartLibrary implements LibraryADT {
             return false;
         }
 
-        if(!cleanPassword.equals(userPasswords.get(cleanUserID))) {
+        if(!existingUser.isPasswordCorrect(cleanPassword)) {
             System.out.println("> Incorrect password for user " + cleanUserID + ".");
             return false;
         }
@@ -76,8 +73,7 @@ public class SmartLibrary implements LibraryADT {
 
     //Registers a new user
     private void registerUser(String userID, String role, String password) {
-        users.put(userID, new User(userID, role));
-        userPasswords.put(userID, password);
+        users.put(userID, new User(userID, role, password));
         System.out.println("> Welcome, " + userID +  ". You have been registered as a " + role + ".");
     }
 

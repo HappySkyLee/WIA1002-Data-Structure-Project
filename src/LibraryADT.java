@@ -1,6 +1,7 @@
 public interface LibraryADT {
 
     boolean logIn(String userID, String role, String password);
+    boolean checkUserExists(String userID);
 
     boolean addBook(long isbn, String title, String author);
     boolean removeBook(long isbn);

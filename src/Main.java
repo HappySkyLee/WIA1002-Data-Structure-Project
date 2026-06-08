@@ -45,7 +45,12 @@ public class Main {
     private static void logInAsLibrarian(){
         System.out.print("> Please enter your Librarian ID: ");
         String librarianID = readNonEmptyString();
-        System.out.print("> Please enter your Password: ");
+        if(library.checkUserExists(librarianID)) {
+            System.out.print("> Please enter your password to log in: ");
+            
+        } else {
+            System.out.print("> Please enter a password to register:");
+        }
         String password = readNonEmptyString();
         if (library.logIn(librarianID, "Librarian", password)) {
             librarianMenu(librarianID);
@@ -56,7 +61,11 @@ public class Main {
     private static void logInAsStudent(){
         System.out.print("> Please enter your Student ID: ");
         String studentID = readNonEmptyString();
-        System.out.print("> Please enter your Password: ");
+        if(library.checkUserExists(studentID)) {
+            System.out.print("> Please enter your password to log in: ");
+        } else {
+            System.out.print("> Please enter a password to register:");
+        }
         String password = readNonEmptyString();
         if (library.logIn(studentID, "Student", password)) {
             studentMenu(studentID);

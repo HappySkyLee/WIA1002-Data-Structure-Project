@@ -71,6 +71,16 @@ public class SmartLibrary implements LibraryADT {
         return true;
     }
 
+    //Checks if a user exists in the system
+    @Override
+    public boolean checkUserExists(String userID) {
+        if (userID == null || userID.trim().isEmpty()) {
+            return false;
+        }
+
+        return users.containsKey(userID.trim());
+    }
+
     //Registers a new user
     private void registerUser(String userID, String role, String password) {
         users.put(userID, new User(userID, role, password));

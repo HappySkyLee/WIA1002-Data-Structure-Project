@@ -238,9 +238,6 @@ public class Main {
                     }
                     System.out.print("> Enter book ISBN to add fine: ");
                     long addFineIsbn = readPositiveLong();
-                    if (!library.isBookBorrowedByUser(addFineUserID, addFineIsbn)) {
-                        break;
-                    }
                     System.out.print("> Enter number of late days: ");
                     int lateDays = readPositiveInt();
                     library.addFine(addFineUserID, addFineIsbn, lateDays);
@@ -254,9 +251,6 @@ public class Main {
                     }
                     System.out.print("> Enter book ISBN to reduce fine: ");
                     long reduceFineIsbn = readPositiveLong();
-                    if (!library.isBookBorrowedByUser(reduceFineUserID, reduceFineIsbn)) {
-                        break;
-                    }
                     System.out.print("> Enter amount to reduce: ");
                     double amount = readPositiveDouble();
                     library.reduceFine(reduceFineUserID, reduceFineIsbn, amount);

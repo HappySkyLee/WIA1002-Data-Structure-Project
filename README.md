@@ -55,18 +55,18 @@ One user ID can only have one role. For example, if `S001` is registered as a Li
 
 ### Password Login Guide
 
-After choosing a role, the program asks for both ID and password:
+After choosing a role, the program asks for both ID and password to register for the first time:
 
 ```text
 > Please enter your Librarian ID:
-> Please enter your Password:
+> Please enter a password to register:
 ```
 
-For students, the prompt is:
+For log in:
 
 ```text
-> Please enter your Student ID:
-> Please enter your Password:
+> Please enter your Librarian ID:
+> Please enter your password to log in:
 ```
 
 Password rules:

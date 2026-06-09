@@ -15,7 +15,8 @@ public interface LibraryADT {
 
     void viewAllBooks();
     void viewAllBorrowedBooks();
-    void viewBorrowedBooksByUser(String userID);
+    boolean viewBorrowedBooksByUser(String userID);
+    boolean isBookBorrowedByUser(String userID, long isbn);
     void viewBorrowedBookHistory(String userID);
     void viewRegisteredUsers();
 

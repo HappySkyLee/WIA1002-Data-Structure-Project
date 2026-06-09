@@ -181,18 +181,20 @@ public class BookBST {
     }
 
     //Displays borrowed books by user
-    public void displayBorrowedBooksByUser(String userID) {
+    public boolean displayBorrowedBooksByUser(String userID) {
         ArrayList<Book> borrowedBooks = new ArrayList<>();
         displayBorrowedBooksByUserRec(root, userID, borrowedBooks);
 
         if (borrowedBooks.isEmpty()) {
             System.out.println("> No books are currently borrowed by user " + userID + ".");
+            return false;
         }
         else {
             System.out.println("> Books currently borrowed by user " + userID + ":");
             for (Book book : borrowedBooks) {
                 System.out.println(book.toString());
             }
+            return true;
         }
     }
 

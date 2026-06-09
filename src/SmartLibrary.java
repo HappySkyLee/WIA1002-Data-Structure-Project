@@ -281,15 +281,35 @@ public class SmartLibrary implements LibraryADT {
 
     //Views currently borrowed books by user 
     @Override
-    public void viewBorrowedBooksByUser(String userID) {
+    public boolean viewBorrowedBooksByUser(String userID) {
         User user = users.get(userID);
 
         if (user == null) {
             System.out.println("> User not found.");
-            return;
+            return false;
         }
 
-        catalogue.displayBorrowedBooksByUser(userID);
+        return catalogue.displayBorrowedBooksByUser(userID);
+    }
+
+    //Checks if a specific book is currently borrowed by the user
+    @Override
+    public boolean isBookBorrowedByUser(String userID, long isbn) {
+        User user = users.get(userID);
+
+        if (user == null) {
+            System.out.println("> User not found.");
+            return false;
+        }
+
+        Book book = catalogue.searchByIsbn(isbn);
+
+        if (book == null) {
+            System.out.println("> Book with ISBN " + isbn + " not found.");
+            return false;
+        }
+
+        return validateFineBookBorrowedByUser(book, userID);
     }
 
     //Views borrow history for a user
@@ -347,6 +367,10 @@ public class SmartLibrary implements LibraryADT {
             return;
         }
 
+        if (!validateFineBookBorrowedByUser(finedBook, userID)) {
+            return;
+        }
+
         if (lateDays <= 0) {
             System.out.println("> Late days must be greater than zero.");
             return;
@@ -375,14 +399,21 @@ public class SmartLibrary implements LibraryADT {
             return;
         }
 
+        Book finedBook = catalogue.searchByIsbn(isbn);
+
+        if (finedBook == null) {
+            System.out.println("> Book with ISBN " + isbn + " not found.");
+            return;
+        }
+
+        if (!validateFineBookBorrowedByUser(finedBook, userID)) {
+            return;
+        }
+
         FineRecord fineRecord = user.findOutstandingFineByIsbn(isbn);
 
         if (fineRecord == null) {
-            if (user.findFineRecordByIsbn(isbn) == null && catalogue.searchByIsbn(isbn) == null) {
-                System.out.println("> Book with ISBN " + isbn + " not found.");
-            } else {
-                System.out.println("> No outstanding fine found for ISBN " + isbn + ".");
-            }
+            System.out.println("> No outstanding fine found for ISBN " + isbn + ".");
             return;
         }
 
@@ -405,6 +436,16 @@ public class SmartLibrary implements LibraryADT {
         undoStack.push(new UndoAction("Reduce_Fine", fineSnapshot, userID, reduceAmount));
         System.out.printf("> Fine reduced successfully. Total outstanding fine for user %s: RM %.2f", userID, user.getTotalFine());
         System.out.println();
+    }
+
+    //Validates if the book is currently borrowed by the user for fine management
+    private boolean validateFineBookBorrowedByUser(Book book, String userID) {
+        if (!book.isBorrowed() || !userID.equals(book.getBorrowBy())) {
+            System.out.println("> Book with ISBN " + book.getIsbn() + " is not currently borrowed by user " + userID + ".");
+            return false;
+        }
+
+        return true;
     }
 
     //Undo last action
